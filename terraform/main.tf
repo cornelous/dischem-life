@@ -5,3 +5,9 @@ module "network" {
   private_cidrs = var.private_cidrs
   region        = var.region
 }
+
+module "security" {
+  source          = "./modules/security"
+  vpc_id          = module.network.vpc_id
+  alb_allow_cidrs = var.alb_allow_cidrs
+}
