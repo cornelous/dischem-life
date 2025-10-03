@@ -2,14 +2,21 @@
 
 Infrastructure for nginx + PostgreSQL on AWS (af-south-1).
 
-## Plan
+## Progress
 
-- VPC with public/private subnets
-- Security groups (ALB, app, database)
-- RDS PostgreSQL (private)
-- EC2 with nginx behind ALB
-- Health monitoring script
+✅ VPC with public/private subnets across 2 AZs
+✅ Security groups (ALB, app)
+🚧 Working on database and compute modules
 
-## Setup
+## Current Structure
 
-Requires Terraform >= 1.6.0 and AWS CLI configured.
+- Network module: VPC, IGW, NAT, route tables, SSM VPC endpoints
+- Security module: ALB and app security groups
+- Using af-south-1 region
+
+## Usage
+
+```bash
+cd terraform
+terraform init
+terraform plan -var-file=../tfvars/dev.auto.tfvars
