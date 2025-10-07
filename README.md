@@ -35,6 +35,22 @@ Tear down:
 terraform destroy -var-file=../tfvars/dev.auto.tfvars
 ```
 
+## Accessing the Application
+
+After deployment, get the ALB DNS name:
+
+```bash
+terraform output alb_dns_name
+```
+
+Then visit: `http://<alb-dns-name>/`
+
+You should see:
+- nginx homepage with health status
+- Status updates every 60 seconds
+- Shows **OK** when all checks pass (nginx, HTTP, database connectivity)
+- Shows **DEGRADED** with details if any check fails
+
 ## State backend
 
 Currently using local state. For team use, uncomment the S3 backend in `terraform/backend.tf` and run `terraform init -migrate-state`. You'll need to create the bucket + DynamoDB table first.
