@@ -23,7 +23,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "public" {
-  for_each = { for i, cidr in var.public_cidrs : i => { cidr = cidr, az = local.azs[i] } }
+  for_each                = { for i, cidr in var.public_cidrs : i => { cidr = cidr, az = local.azs[i] } }
   vpc_id                  = aws_vpc.this.id
   cidr_block              = each.value.cidr
   availability_zone       = each.value.az
@@ -56,7 +56,7 @@ resource "aws_nat_gateway" "nat" {
 }
 
 resource "aws_subnet" "private" {
-  for_each = { for i, cidr in var.private_cidrs : i => { cidr = cidr, az = local.azs[i] } }
+  for_each          = { for i, cidr in var.private_cidrs : i => { cidr = cidr, az = local.azs[i] } }
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value.cidr
   availability_zone = each.value.az
@@ -96,11 +96,11 @@ resource "aws_security_group" "endpoints" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { 
-    from_port = 443 
-    to_port = 443 
-    protocol = "tcp" 
-    cidr_blocks = [for s in var.private_cidrs : s] 
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [for s in var.private_cidrs : s]
   }
 }
 

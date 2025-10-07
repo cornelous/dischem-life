@@ -5,9 +5,9 @@ data "aws_region" "current" {}
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"] # Canonical
-  filter { 
-    name = "name" 
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"] 
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
   filter {
     name   = "virtualization-type"
@@ -19,9 +19,9 @@ data "aws_ami" "ubuntu" {
 data "aws_iam_policy_document" "ec2_assume" {
   statement {
     actions = ["sts:AssumeRole"]
-    principals { 
-      type = "Service" 
-      identifiers = ["ec2.amazonaws.com"] 
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
@@ -103,7 +103,7 @@ resource "aws_lb_target_group" "tg" {
     interval            = 15
     timeout             = 5
   }
-  
+
   # deregistration_delay = 30  # uncomment if you want faster draining
 }
 
@@ -123,7 +123,7 @@ resource "aws_autoscaling_group" "asg" {
   max_size                  = 2
   min_size                  = 1
   vpc_zone_identifier       = var.private_subnet_ids
-  health_check_type         = "EC2"  # could use ELB for stricter checks
+  health_check_type         = "EC2" # could use ELB for stricter checks
   health_check_grace_period = 60
 
   launch_template {
