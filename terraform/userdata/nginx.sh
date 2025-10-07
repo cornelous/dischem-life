@@ -9,6 +9,9 @@ apt-get install -y nginx awscli jq postgresql-client
 systemctl enable nginx
 systemctl start nginx
 
+# Set AWS region for CLI
+export AWS_DEFAULT_REGION="${region}"
+
 # Fetch DB creds from SSM
 DB_ENDPOINT="${db_endpoint}"
 DB_NAME="${db_name}"
@@ -37,6 +40,9 @@ install -d -m 0755 /opt/health
 cat >/opt/health/health_update.sh <<SH
 #!/usr/bin/env bash
 set -euo pipefail
+
+# Set AWS region
+export AWS_DEFAULT_REGION="${region}"
 
 # DB connection info
 DB_ENDPOINT="${db_endpoint}"
@@ -71,7 +77,7 @@ BADGE="\$STATUS"
 
 TMP=\$(mktemp)
 awk -v badge="\$BADGE" -v stamp="\$STAMP" '
-  /<div id="status">/ { print "<div id=\\"status\\">Status: <strong>" badge "</strong> @ " stamp "</div>"; skip=1; next }
+  /<div id=status>/ { print "<div id=status>Status: <strong>" badge "</strong> @ " stamp "</div>"; skip=1; next }
   { if (!skip) print; else if (\$0 ~ /<\\/div>/) skip=0 }
 ' /var/www/html/index.html > "\$TMP" || true
 

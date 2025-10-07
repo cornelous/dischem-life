@@ -1,3 +1,6 @@
+# Get current region
+data "aws_region" "current" {}
+
 # Latest Ubuntu 22.04 LTS AMI (24.04 not available in af-south-1 yet)
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -60,6 +63,7 @@ resource "aws_iam_instance_profile" "ec2" {
 # Render user data with DB connection info
 locals {
   userdata = templatefile("${path.module}/../../userdata/nginx.sh", {
+    region        = data.aws_region.current.id
     db_endpoint   = var.db_endpoint
     db_name       = var.db_name
     db_user       = var.db_username
